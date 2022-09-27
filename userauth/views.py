@@ -2,11 +2,13 @@
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from userauth.serializers import UserRegistrationSerializer, UserLoginSerializer,Personalinfoserializer,UserEducationserializer,UserExprinceserializer
+from userauth.serializers import UserRegistrationSerializer, UserLoginSerializer,Personalinfoserializer,UserEducationserializer,UserExprinceserializer,UserProfileImage
 from django.contrib.auth import authenticate
 from userauth.renderers import UserRenderer
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated  
+from userauth.models import User,ProfileImage,Personalinfo,UserEduacation,UserExprince
+
 
 
 
@@ -49,9 +51,43 @@ class UserLoginView(APIView):
 
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST) 
 
+class ProfileView(APIView):
+   
+    permission_classes = [IsAuthenticated]
+    def get(self, request, format=None):
+        serializer = UserRegistrationSerializer(request.user)
+        data = serializer.data.get('id')
+        print(data)
+
+        User_Profile = ProfileImage.objects.get(user= data)
+        serializer1 = UserProfileImage(User_Profile)
+        print(data)
+
+        User_Personal_Info = Personalinfo.objects.filter(userid = data)
+        serializer2 = Personalinfoserializer(User_Personal_Info, many=True)
+        print(data)
+
+        User_Education = UserEduacation.objects.filter(userid = data)
+        serializer3 = UserEducationserializer(User_Education, many=True)
+        print(data)
+
+        User_Exprince = UserExprince.objects.filter(userid = data)
+        serializer4 = UserExprinceserializer(User_Exprince, many=True)
+        print(data)
+        
+        
+        return Response({
+            'User_Profile':serializer1.data,
+            'User_Personal_Info':serializer2.data,
+            'User_Education':serializer3.data,
+            'User_Exprince':serializer4.data,
+        }, status=status.HTTP_200_OK)
+
+        
+
 
 class PersonalinfoView(APIView):
-    renderer_classes = [UserRenderer]
+   
     permission_classes = [IsAuthenticated]
     def post (self, request, format=None):
         serializer = Personalinfoserializer(data=request.data)
@@ -63,7 +99,6 @@ class PersonalinfoView(APIView):
 
 
 class UserEducationView(APIView):
-    renderer_classes = [UserRenderer]
     permission_classes = [IsAuthenticated]
     def post(self, request, format=None):
         serializer =UserEducationserializer(data=request.data)
@@ -75,7 +110,6 @@ class UserEducationView(APIView):
 
 
 class UserExprinceView(APIView):
-    renderer_classes = [UserRenderer]
     permission_classes = [IsAuthenticated]
     def post(self,request,format=None):
         serializer =UserExprinceserializer(data=request.data)

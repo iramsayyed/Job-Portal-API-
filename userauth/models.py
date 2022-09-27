@@ -87,7 +87,6 @@ class User(AbstractBaseUser):
 
 class ProfileImage(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    username=models.CharField(max_length=100)
     userimage= models.ImageField(upload_to='static/', default='static/images.png')
     background_image= models.ImageField(upload_to='static/', default='static/images.png')
     def __str__(self):
