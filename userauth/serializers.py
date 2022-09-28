@@ -1,7 +1,7 @@
 from dataclasses import field
 from rest_framework import serializers 
-from userauth.models import User,Personalinfo,UserEduacation,UserExprince,ProfileImage
-
+from userauth.models import User,Personalinfo,UserEduacation,UserExprince,ProfileImage,UserSkill
+from taggit.serializers import TagListSerializerField, TaggitSerializer
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -57,3 +57,9 @@ class UserExprinceserializer(serializers.ModelSerializer):
         model = UserExprince
         fields = ['userid','companyname','position_in_company','years_of_exprince','data_of_joining','data_of_leaving']
 
+
+class UserSkillserializer(TaggitSerializer,serializers.ModelSerializer):
+    tags = TagListSerializerField()
+    class Meta:
+        model = UserSkill
+        fields ='__all__'

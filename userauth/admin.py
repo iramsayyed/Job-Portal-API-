@@ -1,5 +1,5 @@
 from django.contrib import admin
-from userauth.models import User,ProfileImage,Personalinfo,UserEduacation,UserExprince
+from userauth.models import User,ProfileImage,Personalinfo,UserEduacation,UserExprince,UserSkill
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 # Register your models here.
@@ -33,7 +33,7 @@ admin.site.register(ProfileImage)
 admin.site.register(Personalinfo)
 admin.site.register(UserEduacation)
 admin.site.register(UserExprince)
-# admin.site.register(UserSkills)
+admin.site.register(UserSkill)
 
 
 

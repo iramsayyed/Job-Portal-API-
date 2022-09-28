@@ -4,7 +4,7 @@ from pyexpat import model
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from django.db.models.signals import post_save
-# from taggit.managers import TaggableManager
+from taggit.managers import TaggableManager
 
 # Create your models here.
 class MyUserManager(BaseUserManager):
@@ -127,7 +127,7 @@ class Personalinfo(models.Model):
     maritalstatus = models.CharField(max_length=1, choices=MARITAL_STATUS)
 
     def __str__(self) :
-        return self.name
+       return str(self.userid)
     
 
 class UserEduacation(models.Model):
@@ -144,7 +144,7 @@ class UserEduacation(models.Model):
     passingYear = models.DateField()
     
     def __str__(self):
-        return self.userid
+        return str(self.userid)
     
 class UserExprince(models.Model):
     userid = models.ForeignKey(User,on_delete=models.CASCADE)
@@ -156,14 +156,13 @@ class UserExprince(models.Model):
 
 
     def __str__(self):
-        return self.userid
+        return str(self.userid)
 
 
-# class Skill(models.Model):
-#     id = models.AutoField(primary_key=True)
-#     user_id = models.ManyToManyField(User)
-#     skill = models.CharField(max_length=20)
+class UserSkill(models.Model):
+    userid = models.ManyToManyField(User)
+   
     
-#     tags = TaggableManager()
-#     def __str__(self):
-#         return self.user_id.name
+    tags = TaggableManager()
+    def __str__(self):
+        return str(self.userid)
